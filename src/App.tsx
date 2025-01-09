@@ -1,35 +1,85 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useState } from 'react';
+import './App.css';
+import meatImage from './assets/meat.png';
+import cheeseImage from './assets/cheese.png';
+import saladImage from './assets/salad.png';
+import baconImage from './assets/bacon.png';
 
-function App() {
-  const [count, setCount] = useState(0);
+const App = () => {
+  interface Ingredient {
+    name: string;
+    price: number;
+    image: string;
+  }
+
+  const INGREDIENTS: Ingredient[] = [
+    {
+      name: 'Meat', // мясо
+      price: 80,
+      image: meatImage
+    },
+
+    {
+      name: 'Cheese',
+      price: 50,
+      image: cheeseImage
+    },
+
+    {
+      name: 'Salad',
+      price: 10,
+      image: saladImage
+    },
+
+    {
+      name: 'Bacon',
+      price: 60,
+      image: baconImage
+    }
+  ];
+
+  console.log(INGREDIENTS);
+
+
+  const [ingredients, setIngredients] = useState([
+    {name: 'Meat', count: 0},
+    {name: 'Cheese', count: 0},
+    {name: 'Salad', count: 0},
+    {name: 'Bacon', count: 0},
+
+  ]);
+
+  const ingredientAddition = (index: number) => {
+    setIngredients(prevState => prevState.map((ingredient, i) => {
+        if (i === index) {
+          return {
+            ...ingredient,
+            count: ingredient.count + 1
+          };
+        }
+        return {...ingredient};
+      })
+    );
+
+    console.log(ingredients[index]);
+  };
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h2>Ingredients</h2>
+        {INGREDIENTS.map((ingredient, index) => (
+          <div key={ingredient.name}>
+            <button onClick={() => ingredientAddition(index)}
+                    className={`image-button ${ingredient.name}-img`}></button>
+            <p>{ingredient.name}: {ingredients[index].count}</p>
+            <p></p>
+            <hr/>
+          </div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
-}
+};
 
 export default App;

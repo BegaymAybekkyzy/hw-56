@@ -40,3 +40,28 @@
 .read-the-docs {
   color: #888;
 }
+
+/*стилизация кнопок*/
+.image-button {
+  width: 200px;
+  height: 200px;
+
+  /*background-image: url('path/to/image.jpg');*/
+  background-size: cover;
+}
+
+.Meat-img{
+  background-image: url("./assets/meat.png");
+}
+
+.Cheese-img{
+  background-image: url("./assets/cheese.png");
+}
+
+.Salad-img{
+  background-image: url("./assets/salad.png");
+}
+
+.Bacon-img{
+  background-image: url("./assets/bacon.png");
+}
