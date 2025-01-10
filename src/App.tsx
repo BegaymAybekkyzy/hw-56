@@ -14,7 +14,7 @@ const App = () => {
 
   const INGREDIENTS: Ingredient[] = [
     {
-      name: 'Meat', // мясо
+      name: 'Meat',
       price: 80,
       image: meatImage
     },
@@ -38,9 +38,6 @@ const App = () => {
     }
   ];
 
-  console.log(INGREDIENTS);
-
-
   const [ingredients, setIngredients] = useState([
     {name: 'Meat', count: 0},
     {name: 'Cheese', count: 0},
@@ -49,34 +46,76 @@ const App = () => {
 
   ]);
 
-  const ingredientAddition = (index: number) => {
-    setIngredients(prevState => prevState.map((ingredient, i) => {
-        if (i === index) {
-          return {
-            ...ingredient,
-            count: ingredient.count + 1
-          };
-        }
-        return {...ingredient};
-      })
-    );
+  const [userIngredients, setUserIngredients] = useState<string[]>([]);
 
-    console.log(ingredients[index]);
+  const ingredientAddition = (index: number) => {
+    const copyIngredients = [...ingredients];
+    const copyIngredient = copyIngredients[index];
+    copyIngredient.count ++;
+    copyIngredients[index] = copyIngredient;
+    setIngredients(copyIngredients);
+
+    if(userIngredients.length === 0) {
+      userIngredients.push(copyIngredient.name);
+      setUserIngredients(userIngredients);
+    } else {
+      const copyUserIngredients = [...userIngredients];
+      copyUserIngredients.push(copyIngredient.name);
+      setUserIngredients(copyUserIngredients);
+    }
+
+    console.log(userIngredients);
+  };
+
+  const ingredientRemoval = (index: number) => {
+    if(ingredients[index].count > 0) {
+      const copyIngredients = [...ingredients];
+      const copyIngredient = copyIngredients[index];
+      copyIngredient.count --;
+      copyIngredients[index] = copyIngredient;
+      setIngredients(copyIngredients);
+    }
+
+    if(userIngredients.length !== 0 && userIngredients[index] === ingredients[index].name) {
+      const copyUserIngredients = [...userIngredients];
+      copyUserIngredients.splice(copyUserIngredients.indexOf(copyUserIngredients[index]), 1);
+      setUserIngredients(copyUserIngredients);
+    }
+
+    console.log(userIngredients);
   };
 
   return (
     <>
-      <div>
-        <h2>Ingredients</h2>
-        {INGREDIENTS.map((ingredient, index) => (
-          <div key={ingredient.name}>
-            <button onClick={() => ingredientAddition(index)}
-                    className={`image-button ${ingredient.name}-img`}></button>
-            <p>{ingredient.name}: {ingredients[index].count}</p>
-            <p></p>
-            <hr/>
+      <div className="main-block">
+        <div>
+          <h2>Ingredients</h2>
+          {INGREDIENTS.map((ingredient, index) => (
+            <div key={ingredient.name}>
+              <button
+                onClick={() => ingredientAddition(index)}
+                className={`image-button ${ingredient.name}-img`}>
+              </button>
+              <p>{ingredient.name}: {ingredients[index].count}</p>
+              <button onClick={() => ingredientRemoval(index)}>Remove</button>
+              <hr/>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <div className="Burger">
+            <div className="BreadTop">
+              <div className="Seeds1"></div>
+              <div className="Seeds2"></div>
+            </div>
+            {userIngredients.map((ingredient, index) => (
+              <div key={index} className={ingredient}></div>
+            ))}
+            <div className="BreadBottom"></div>
           </div>
-        ))}
+        </div>
+
       </div>
     </>
   );
